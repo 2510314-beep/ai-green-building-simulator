@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI 친환경 건물 시뮬레이터</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <h1>🏢 AI 친환경 건물 시뮬레이터</h1>
+      <p>딥러닝 신경망이 15분마다 건물의 에너지·탄소 배출을 예측하고, 날씨에 맞춰 <b>창문 · 커튼 · 태양광 패널 · 풍력 발전기 · 빗물 수력 발전 · 옥상 살수 · 조명 · 배터리 · 냉난방</b>을 스스로 조절합니다.</p>
+    </header>
+
+    <div class="row1">
+      <section class="card stage">
+        <div class="statusbar">
+          <div class="clock"><span id="clockDay">1일차</span><strong id="clockTime">07:00</strong></div>
+          <div class="chips" id="envChips"></div>
+          <div class="play">
+            <button id="btnPlay" type="button">⏸ 일시정지</button>
+            <button id="btnSkip" type="button">⏩ +3시간</button>
+          </div>
+        </div>
+        <div class="canvas-wrap"><canvas id="scene"></canvas></div>
+        <div class="controls">
+          <label>계절(월)<select id="selMonth"></select></label>
+          <label>날씨
+            <select id="selWeather">
+              <option value="auto">자동 변화</option>
+              <option value="clear">☀️ 맑음</option>
+              <option value="cloudy">☁️ 흐림</option>
+              <option value="rain">🌧️ 비 / 눈</option>
+              <option value="storm">⛈️ 폭우</option>
+            </select>
+          </label>
+          <label>바람
+            <select id="selWind">
+              <option value="auto">자동</option>
+              <option value="calm">잔잔함 (1 m/s)</option>
+              <option value="normal">보통 (5 m/s)</option>
+              <option value="strong">강풍 (14 m/s)</option>
+              <option value="typhoon">🌀 태풍 (23 m/s)</option>
+            </select>
+          </label>
+          <label>미세먼지
+            <select id="selPM">
+              <option value="auto">자동 변화</option>
+              <option value="good">좋음 (10㎍/㎥)</option>
+              <option value="bad">나쁨 (55㎍/㎥)</option>
+              <option value="verybad">매우 나쁨 (110㎍/㎥)</option>
+            </select>
+          </label>
+          <label>기온 조정 <span id="lblTemp">0°C</span>
+            <input type="range" id="rngTemp" min="-10" max="10" step="1" value="0">
+          </label>
+          <label>속도
+            <select id="selSpeed">
+              <option value="15">느리게 (1시간 = 4초)</option>
+              <option value="40" selected>보통 (1시간 = 1.5초)</option>
+              <option value="120">빠르게 (1시간 = 0.5초)</option>
+              <option value="360">매우 빠르게</option>
+            </select>
+          </label>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="card">
+          <h2>📊 오늘의 비교</h2>
+          <div id="kpi"><p class="muted">AI 학습이 끝나면 시작합니다.</p></div>
+        </section>
+        <section class="card">
+          <h2>🧠 AI의 현재 판단 <span id="modeTag" class="tag"></span></h2>
+          <div id="decision"><p class="muted">AI 학습이 끝나면 시작합니다.</p></div>
+        </section>
+      </aside>
+    </div>
+
+    <div class="row2">
+      <section class="card">
+        <h2>🔍 AI가 검토한 20가지 조합</h2>
+        <p class="hint">15분마다 신경망이 모든 조합의 전력 사용량(kWh)을 미리 예측합니다. 초록색일수록 탄소 배출이 적고, 테두리가 AI의 선택입니다.</p>
+        <div id="optGrid"></div>
+        <div id="predNote" class="note"></div>
+      </section>
+      <section class="card">
+        <h2>⚡ 전력망에서 끌어온 전력 (최근 24시간)</h2>
+        <canvas id="chartPower" class="chart"></canvas>
+        <div class="legend">
+          <span><i style="background:var(--base)"></i>일반 건물</span>
+          <span><i style="background:var(--accent)"></i>AI 건물</span>
+          <span><i style="background:var(--pv)"></i>AI 건물 발전 (태양광+풍력+빗물 수력)</span>
+        </div>
+        <p class="hint">0 아래로 내려가면 쓰고 남은 태양광 전기를 전력망에 보내는 중입니다.</p>
+      </section>
+      <section class="card">
+        <h2>🎯 AI 예측 vs 실제 (15분 전력량)</h2>
+        <canvas id="chartPred" class="chart"></canvas>
+        <div class="legend">
+          <span><i style="background:var(--pred)"></i>AI 예측</span>
+          <span><i style="background:var(--accent)"></i>실제 측정</span>
+        </div>
+        <div id="predAcc" class="note"></div>
+      </section>
+      <section class="card">
+        <h2>📚 AI 학습 기록 <button id="btnRetrain" type="button" class="small">🔄 다시 학습</button></h2>
+        <canvas id="chartTrain" class="chart"></canvas>
+        <div class="legend">
+          <span><i style="background:var(--muted)"></i>학습 데이터 오차</span>
+          <span><i style="background:var(--pred)"></i>시험 데이터 오차</span>
+        </div>
+        <div id="trainInfo" class="note"></div>
+      </section>
+    </div>
+
+    <footer>
+      교육용 시뮬레이션입니다. 건물 열 계산은 단순화한 물리 모델(RC 모델)을 쓰고, 기후는 서울 평년값, 전력 탄소계수는 한국 평균(약 0.46 kg/kWh)을 바탕으로 한 근사값입니다.
+    </footer>
+  </div>
+
+  <script src="js/environment.js"></script>
+  <script src="js/building.js"></script>
+  <script src="js/neural.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

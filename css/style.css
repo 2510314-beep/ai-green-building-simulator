@@ -1,0 +1,143 @@
+:root {
+  --bg: #f2f4f7;
+  --card: #ffffff;
+  --text: #1d2430;
+  --muted: #6b7686;
+  --line: #e3e8ef;
+  --grid: #edf0f4;
+  --accent: #14946b;
+  --accent-soft: #e2f5ed;
+  --base: #d9822b;
+  --pv: #e0a800;
+  --pred: #7b5cd6;
+  --og-l: 84%;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .04), 0 6px 20px rgba(20, 30, 50, .06);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1319;
+    --card: #161d26;
+    --text: #e6ebf2;
+    --muted: #93a0b2;
+    --line: #263040;
+    --grid: #212a36;
+    --accent: #3cc794;
+    --accent-soft: #15332a;
+    --base: #f0a04b;
+    --pv: #f5c842;
+    --pred: #a68cf0;
+    --og-l: 30%;
+  }
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.wrap { max-width: 1480px; margin: 0 auto; padding: 16px; }
+
+.top h1 { margin: 4px 0 2px; font-size: 24px; }
+.top p { margin: 0 0 14px; color: var(--muted); }
+
+.row1 { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 16px; align-items: start; }
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+@media (max-width: 1100px) { .row1 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 800px) { .row2 { grid-template-columns: minmax(0, 1fr); } }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+.side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.card h2 { font-size: 15px; margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
+.muted, .hint { color: var(--muted); }
+.hint { font-size: 12.5px; margin: -4px 0 10px; }
+.note { font-size: 13px; margin-top: 8px; }
+
+/* 상단 상태 바 */
+.statusbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.clock { display: flex; align-items: baseline; gap: 8px; }
+.clock span { color: var(--muted); font-size: 13px; }
+.clock strong { font-size: 26px; font-variant-numeric: tabular-nums; letter-spacing: .5px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+.chip {
+  font-size: 12.5px; padding: 3px 9px; border-radius: 999px;
+  background: var(--bg); border: 1px solid var(--line); white-space: nowrap;
+}
+.play { display: flex; gap: 6px; }
+
+button, select, input { font: inherit; color: inherit; }
+button {
+  background: var(--accent); color: #fff; border: 0; border-radius: 8px;
+  padding: 6px 12px; cursor: pointer; font-weight: 600;
+}
+button:hover { filter: brightness(1.08); }
+button.small { padding: 2px 8px; font-size: 12px; margin-left: auto; background: var(--bg); color: var(--text); border: 1px solid var(--line); }
+select {
+  background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px;
+}
+
+.canvas-wrap { width: 100%; border-radius: 10px; overflow: hidden; }
+#scene { display: block; width: 100%; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 12px; }
+.controls label { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.controls label span { color: var(--text); }
+.controls input[type=range] { width: 160px; accent-color: var(--accent); }
+
+/* 비교 표 */
+.kpi { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.kpi th, .kpi td { padding: 6px 4px; text-align: right; border-bottom: 1px solid var(--line); }
+.kpi th:first-child, .kpi td:first-child { text-align: left; color: var(--muted); font-weight: 500; }
+.kpi th { font-size: 12.5px; }
+.kpi th.ai, .kpi td.ai { color: var(--accent); font-weight: 700; }
+.saving {
+  margin-top: 10px; padding: 10px 12px; border-radius: 10px;
+  background: var(--accent-soft); color: var(--accent); font-weight: 600;
+}
+.saving b { font-size: 20px; }
+.total { margin-top: 6px; font-size: 12.5px; color: var(--muted); }
+
+/* AI 판단 */
+.tag { font-size: 11.5px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.dec-row { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.dec-row:last-child { border-bottom: 0; }
+.dec-icon { font-size: 18px; line-height: 1.2; }
+.dec-head { display: flex; justify-content: space-between; gap: 8px; font-weight: 600; }
+.dec-head b { color: var(--accent); font-variant-numeric: tabular-nums; }
+.bar { height: 6px; border-radius: 3px; background: var(--grid); margin: 4px 0; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 3px; transition: width .4s; }
+.dec-row p { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+/* 조합 그리드 */
+.og { display: grid; grid-template-columns: 58px repeat(5, minmax(0, 1fr)); gap: 4px; font-variant-numeric: tabular-nums; }
+.og-h { font-size: 11.5px; color: var(--muted); text-align: center; align-self: center; }
+.og-corner { font-size: 10.5px; color: var(--muted); line-height: 1.2; }
+.og-cell {
+  border-radius: 6px; padding: 6px 2px; text-align: center; font-size: 13px; font-weight: 600;
+  border: 2px solid transparent; color: var(--text);
+}
+.og-cell small { display: block; font-size: 10px; font-weight: 400; color: var(--muted); }
+.og-cell.best { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.og-cell.blocked { background: var(--grid); color: var(--muted); font-weight: 400; }
+
+.chart { width: 100%; height: 190px; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); margin-top: 6px; }
+.legend i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+
+footer { color: var(--muted); font-size: 12px; text-align: center; margin: 20px 0 8px; }
+
+@media (max-width: 600px) {
+  .wrap { padding: 10px 16px; }
+  .top h1 { font-size: 20px; }
+  .controls input[type=range] { width: 130px; }
+}
